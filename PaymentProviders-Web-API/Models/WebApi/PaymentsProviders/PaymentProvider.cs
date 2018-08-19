@@ -23,7 +23,7 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentsProviders
         public IEnumerable<PaymentRegion> Regions { get; set; }
 
         /// <summary>
-        /// Determines whether provider is active of not. If provider was deleted no actions can permofmed.
+        /// Determines whether provider is active of not. If provider was deleted no actions can be permofmed.
         /// </summary>
         public bool Deleted { get; set; }
 

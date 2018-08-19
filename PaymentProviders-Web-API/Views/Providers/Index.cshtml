@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Providers";
+}
+<h2>@ViewData["Title"]</h2>
+<h3>@ViewData["Message"]</h3>
+
+<div>
+    <p>Providers page</p>
+
+    <form method="post" enctype="multipart/form-data" asp-controller="Providers" asp-action="UploadFile">
+        <div class="form-group">
+            <div class="col-md-10">
+                <p>Upload provider catalog</p>
+                <input type="file" name="file" accept=".xml" />
+                <input type="submit" value="Upload and Update" />
+            </div>
+        </div>
+    </form>
+</div>

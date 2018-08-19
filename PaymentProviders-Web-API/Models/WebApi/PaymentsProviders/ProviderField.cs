@@ -11,6 +11,8 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentsProviders
 
         public ProductPaymentInfoType Type { get; set; }
 
+        public IEnumerable<ProviderMaskListItem> MaskListItem { get; set; }
+
         public string Name { get; set; }
 
         public bool Required { get; set; }
