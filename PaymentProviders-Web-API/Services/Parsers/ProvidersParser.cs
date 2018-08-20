@@ -1,6 +1,8 @@
-﻿using PaymentProviders_Web_API.Models.WebApi.PaymentsProviders;
+﻿using Newtonsoft.Json.Linq;
+using PaymentProviders_Web_API.Models.WebApi.PaymentsProviders;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -42,21 +44,24 @@ namespace PaymentProviders_Web_API.Services.Parsers
         private static IEnumerable<ProductPaymentInfo> ParsePaymentInfo(string commision, string minSumma, string maxSumma)
         {
             List<ProductPaymentInfo> productPaymInfoList = new List<ProductPaymentInfo>();
-
+                        
             var commisionArray = commision.Split(';');
             var minSummaArray = minSumma.Split(',');
             var maxSummaArray = maxSumma.Split(',');
 
+            // amount of comission object is always 5
             for (int i = 0; i < 5; i++)
             {
                 ProductPaymentInfo paymentInfo = new ProductPaymentInfo();
 
+                // amount of min and max summa objects may be less than amount of commision object and may be empty
                 if (i <= minSummaArray.Count() - 1 && minSummaArray[i] != "")
                     paymentInfo.MinSum = double.Parse(minSummaArray[i]);
 
                 if (i <= maxSummaArray.Count() - 1 && maxSummaArray[i] != "")
                     paymentInfo.MaxSum = double.Parse(maxSummaArray[i]);
 
+                // product type determine its index
                 switch (i)
                 {
                     case 0:
@@ -75,9 +80,10 @@ namespace PaymentProviders_Web_API.Services.Parsers
                         paymentInfo.ProductType = ProductPaymentInfoType.Cash;
                         break;
                 }
-
+                
                 string commisionItem = commisionArray[i];
 
+                // commision may be null. in that case continue loop
                 if (string.IsNullOrEmpty(commisionItem))
                 {
                     paymentInfo.Commission = null;
@@ -85,7 +91,7 @@ namespace PaymentProviders_Web_API.Services.Parsers
                     continue;
                 }
 
-                var commisionItemProps = commisionItem.Split('(');
+                var commisionItemProps = commisionItem.Split('('); // split commision object into commision value, and range for that commision
                 string commsionRawValue = commisionItemProps[0];
                 string rangeRawValue = commisionItemProps[1];
                 rangeRawValue = rangeRawValue.Remove(rangeRawValue.Length - 1, 1); // get rid of ')'
@@ -112,6 +118,28 @@ namespace PaymentProviders_Web_API.Services.Parsers
             }
 
             return productPaymInfoList;
+        }
+
+        private static IEnumerable<PaymentRegion> ParseRegions(string regions)
+        {
+            if (string.IsNullOrEmpty(regions))
+            {
+                return null;
+            }
+
+            List<PaymentRegion> list = new List<PaymentRegion>();
+            var regionsArray = regions.Split(';');
+
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "res", "CodesAndRegions.json");
+            JObject json = JObject.Parse(System.IO.File.ReadAllText(filePath));
+
+            var regionsList = from region in json["data"] select new { Name = (string)region["name"], Code = (string)region["regioncode"] };
+
+            foreach (var item in regionsArray)
+                list.Add(new PaymentRegion { Code = int.Parse(item), Name = regionsList.First(x => x.Code == item).Name });
+
+            return list;
+
         }
     }
 }

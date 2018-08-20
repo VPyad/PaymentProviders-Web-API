@@ -1,0 +1,68 @@
+﻿{
+  "data": [
+    {
+      "operatorCode": "OW||INSURANCE",
+      "operatorName": "Страхование"
+    },
+    {
+      "operatorCode": "OW||INTERNET",
+      "operatorName": "Интернет"
+    },
+    {
+      "operatorCode": "OW||JKU",
+      "operatorName": "Услуги ЖКХ"
+    },
+    {
+      "operatorCode": "OW||MLM",
+      "operatorName": "Сетевой маркетинг"
+    },
+    {
+      "operatorCode": "OW||MOBILE",
+      "operatorName": "Мобильная связь"
+    },
+    {
+      "operatorCode": "OW||ONLINE_SHOP",
+      "operatorName": "Интернет-магазины"
+    },
+    {
+      "operatorCode": "OW||OTH",
+      "operatorName": "Другие платежи"
+    },
+    {
+      "operatorCode": "OW||SECURITY",
+      "operatorName": "Охранные услуги"
+    },
+    {
+      "operatorCode": "OW||SOCIAL_NETWORK_GAMES",
+      "operatorName": "Социальные сети и игры"
+    },
+    {
+      "operatorCode": "OW||TELEPHONE",
+      "operatorName": "Телефония"
+    },
+    {
+      "operatorCode": "OW||TRANSPORT",
+      "operatorName": "Транспорт"
+    },
+    {
+      "operatorCode": "OW||TRAVEL",
+      "operatorName": "Путешествия"
+    },
+    {
+      "operatorCode": "OW||DIGITALTV",
+      "operatorName": "Телевидение"
+    },
+    {
+      "operatorCode": "OW||EDUCATION",
+      "operatorName": "Образование"
+    },
+    {
+      "operatorCode": "OW||ELKOSHEL",
+      "operatorName": "Электронные кошельки"
+    },
+    {
+      "operatorCode": "OW||CREDIT",
+      "operatorName": "Погашение кредитов"
+    }
+  ]
+}
