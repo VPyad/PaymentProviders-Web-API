@@ -9,7 +9,9 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentsProviders
     {
         public long Id { get; set; }
 
-        public ProductPaymentInfoType Type { get; set; }
+        public FieldType Type { get; set; }
+
+        public FieldInerfaceType InterfaceType { get; set; }
 
         public IEnumerable<ProviderMaskListItem> MaskListItem { get; set; }
 
@@ -34,5 +36,21 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentsProviders
         public string RegExp { get; set; }
 
         public bool DontTicket { get; set; }
+    }
+
+    public enum FieldType
+    {
+        String,
+        Int,
+        Numeric,
+        MaskList,
+        Unknown
+    }
+
+    public enum FieldInerfaceType
+    {
+        Number,
+        String,
+        Unknown
     }
 }

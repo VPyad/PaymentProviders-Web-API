@@ -18,13 +18,39 @@ namespace PaymentProviders_Web_API.Services.Parsers
             xdoc = XDocument.Load(pathToFile);
         }
 
-        public string Test()
+        public IEnumerable<PaymentProvider> ParseProviders()
         {
-            return (string)xdoc.Descendants("Operator").First().Attribute("Name_RU").Value;
+            var collection = from provider in xdoc.Descendants("Operator")
+                             select new PaymentProvider
+                             {
+                                 ProviderCode = (string)provider.Attribute("OperatorCode"),
+                                 NameRu = (string)provider.Attribute("Name_RU"),
+                                 Order = (int)provider.Attribute("Order"),
+                                 CatalogCode = (string)provider.Attribute("Senior"),
+                                 Mrlist = (bool)provider.Attribute("Mrlist"),
+                                 MultiCheck = (bool)provider.Attribute("MultiCheck"),
+                                 NoSavePt = (bool)provider.Attribute("NoSavePT"),
+                                 Check = (bool)provider.Attribute("Check"),
+                                 Deleted = (bool)provider.Attribute("Deleted"),
+                                 IsSupportRequestRSTEP = (bool)provider.Attribute("IsSupportRequestRSTEP"),
+                                 ChequeName = (string)provider.Elements("Localizations").LastOrDefault().Value,
+                                 PaymentInfo = new PaymentInfo
+                                 {
+                                     ProductsPaymentInfo = ParsePaymentInfo((string)provider.Attribute("ExtraCommission"),
+                                     (string)provider.Attribute("Summa"), (string)provider.Attribute("MaxSumma"))
+                                 },
+                                 Regions = ParseRegions((string)provider.Attribute("Region")),
+                                 Fields = ParseFields(provider.Elements("Param"))
+                             };
+
+            return collection;
         }
 
-        public static IEnumerable<ProviderMaskListItem> ParseMaskListItem(string mask)
+        private static IEnumerable<ProviderMaskListItem> ParseMaskListItem(string mask, string type)
         {
+            if (type != "MaskList")
+                return null;
+
             List<ProviderMaskListItem> list = new List<ProviderMaskListItem>();
 
             char pairSeparator = mask[0];
@@ -140,6 +166,72 @@ namespace PaymentProviders_Web_API.Services.Parsers
 
             return list;
 
+        }
+
+        private static IEnumerable<ProviderField> ParseFields(IEnumerable<XElement> fieldsXml)
+        {
+            var collection = from field in fieldsXml
+                             select new ProviderField
+                             {
+                                 Name = (string)field.Attribute("Name"),
+                                 Required = ParseCBool((string)field.Attribute("Required")),
+                                 Direction = (int)field.Attribute("Direction"),
+                                 DontShow = (bool)field.Attribute("DontShow"),
+                                 DontTicket = (bool)field.Attribute("DontTicket"),
+                                 MaxLength = (int)field.Attribute("MaxLength"),
+                                 MinLength = (int)field.Attribute("MinLength"),
+                                 Title = (string)field.Attribute("Title"),
+                                 RegExp = (string)field.Attribute("RegularExpression"),
+                                 Comment = (string)field.Attribute("Comment"),
+                                 InterfaceType = ParseInerfaceType("InterfaceType"),
+                                 Type = ParseFieldType("Type"),
+                                 Mask = ParseMask((string)field.Attribute("Mask"), (string)field.Attribute("Type")),
+                                 MaskListItem = ParseMaskListItem((string)field.Attribute("Mask"), (string)field.Attribute("Type"))
+                             };
+            return null;
+        }
+
+        private static bool ParseCBool(string value)
+        {
+            return value == "1" ? true : false;
+        }
+
+        private static FieldType ParseFieldType(string filedType)
+        {
+            switch (filedType)
+            {
+                case "String":
+                    return FieldType.String;
+                case "Int":
+                    return FieldType.Int;
+                case "Numeric":
+                    return FieldType.Numeric;
+                case "MaskList":
+                    return FieldType.MaskList;
+                default:
+                    return FieldType.Unknown;
+            }
+        }
+
+        private static FieldInerfaceType ParseInerfaceType(string interfaceType)
+        {
+            switch (interfaceType)
+            {
+                case "%String":
+                    return FieldInerfaceType.String;
+                case "%Number":
+                    return FieldInerfaceType.Number;
+                default:
+                    return FieldInerfaceType.Unknown;
+            }
+        }
+
+        private static string ParseMask(string mask, string type)
+        {
+            if (type == "MaskList" || mask == "true")
+                return "";
+            else
+                return mask;
         }
     }
 }

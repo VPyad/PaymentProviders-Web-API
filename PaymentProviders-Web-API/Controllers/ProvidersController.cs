@@ -33,15 +33,8 @@ namespace PaymentProviders_Web_API.Controllers
             }
 
             ProvidersParser parser = new ProvidersParser(filePath);
-            string s = parser.Test();
-
-            string test = @";-0-пополнение лицевого счета;2-оплата пакета «Ночной» год;5-оплата пакета «Наш футбол»месяц;16-оплата пакета «Детский» год;21-оплата пакета «Единый»;24-оплата пакета «Мультирум»(500 р./год);27-оплата пакета «Детский» месяц;31-оплата пакета «Ночной» месяц;45-оплата пакета «МАТЧ! ФУТБОЛ» месяц;46-оплата пакета «Сити»;48-оплата пакета «UltraHD»;49-оплата пакета «Спутниковый интернет»;52-оплата пакета «Весь футбол»";
-            var list = ProvidersParser.ParseMaskListItem(test);
-
-            foreach (var item in list)
-                Debug.WriteLine($"key: {item.Key}, desc: {item.Desc}");
-
-            return Ok(new { Name = file.FileName, Length = file.Length, Path = filePath, text = s });
+            
+            return Ok(new { Name = file.FileName, Length = file.Length, Path = filePath });
         }
     }
 }
