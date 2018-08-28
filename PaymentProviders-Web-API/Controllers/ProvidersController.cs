@@ -33,7 +33,9 @@ namespace PaymentProviders_Web_API.Controllers
             }
 
             ProvidersParser parser = new ProvidersParser(filePath);
-            
+
+            var providers = parser.ParseProviders().ToList();
+
             return Ok(new { Name = file.FileName, Length = file.Length, Path = filePath });
         }
     }

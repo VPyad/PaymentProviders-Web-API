@@ -14,19 +14,7 @@ namespace PaymentProviders_Web_API.Controllers
     {
         public IActionResult Index()
         {
-            Test();
             return View();
-        }
-
-        private void Test()
-        {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "res", "CodesAndRegions.json");
-            JObject json = JObject.Parse(System.IO.File.ReadAllText(filePath));
-
-            var regions = from region in json["data"] select (string)region["name"];
-
-            foreach (var item in regions)
-                Debug.WriteLine(item);
         }
 
         public IActionResult About()

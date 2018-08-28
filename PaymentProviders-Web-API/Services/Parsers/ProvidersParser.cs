@@ -2,6 +2,7 @@
 using PaymentProviders_Web_API.Models.WebApi.PaymentsProviders;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,27 +21,29 @@ namespace PaymentProviders_Web_API.Services.Parsers
 
         public IEnumerable<PaymentProvider> ParseProviders()
         {
-            var collection = from provider in xdoc.Descendants("Operator")
+            //var q = (string)xdoc.Descendants("Operator").First().Descendants("Param").First().Attribute("Name");
+
+            var collection = from provider in xdoc.Descendants("Operator").Where(x => (string)x.Attribute("Group") == "false")
                              select new PaymentProvider
                              {
                                  ProviderCode = (string)provider.Attribute("OperatorCode"),
-                                 NameRu = (string)provider.Attribute("Name_RU"),
-                                 Order = (int)provider.Attribute("Order"),
-                                 CatalogCode = (string)provider.Attribute("Senior"),
-                                 Mrlist = (bool)provider.Attribute("Mrlist"),
-                                 MultiCheck = (bool)provider.Attribute("MultiCheck"),
-                                 NoSavePt = (bool)provider.Attribute("NoSavePT"),
-                                 Check = (bool)provider.Attribute("Check"),
-                                 Deleted = (bool)provider.Attribute("Deleted"),
-                                 IsSupportRequestRSTEP = (bool)provider.Attribute("IsSupportRequestRSTEP"),
-                                 ChequeName = (string)provider.Elements("Localizations").LastOrDefault().Value,
+                                 NameRu = (string)provider.Attribute("Name_RU") ?? "",
+                                 Order = (long?)provider.Attribute("Order") ?? -1,
+                                 CatalogCode = (string)provider.Attribute("Senior") ?? "",
+                                 Mrlist = (bool?)provider.Attribute("Mrlist") ?? false,
+                                 MultiCheck = (bool?)provider.Attribute("MultiCheck") ?? false,
+                                 NoSavePt = (bool?)provider.Attribute("NoSavePT") ?? false,
+                                 Check = (bool?)provider.Attribute("Check") ?? false,
+                                 Deleted = (bool?)provider.Attribute("Deleted") ?? false,
+                                 IsSupportRequestRSTEP = (bool?)provider.Attribute("IsSupportRequestRSTEP") ?? false,
+                                 ChequeName = (string)provider.Elements("Localizations").First().Value,
                                  PaymentInfo = new PaymentInfo
                                  {
                                      ProductsPaymentInfo = ParsePaymentInfo((string)provider.Attribute("ExtraCommission"),
                                      (string)provider.Attribute("Summa"), (string)provider.Attribute("MaxSumma"))
                                  },
                                  Regions = ParseRegions((string)provider.Attribute("Region")),
-                                 Fields = ParseFields(provider.Elements("Param"))
+                                 Fields = ParseFields(provider.Descendants("Param"))
                              };
 
             return collection;
@@ -103,7 +106,7 @@ namespace PaymentProviders_Web_API.Services.Parsers
                         paymentInfo.ProductType = ProductPaymentInfoType.Card;
                         break;
                     case 4:
-                        paymentInfo.ProductType = ProductPaymentInfoType.Cash;
+                        paymentInfo.ProductType = ProductPaymentInfoType.Account;
                         break;
                 }
                 
@@ -170,25 +173,28 @@ namespace PaymentProviders_Web_API.Services.Parsers
 
         private static IEnumerable<ProviderField> ParseFields(IEnumerable<XElement> fieldsXml)
         {
+            if (fieldsXml == null)
+                return null;
+
             var collection = from field in fieldsXml
                              select new ProviderField
                              {
-                                 Name = (string)field.Attribute("Name"),
-                                 Required = ParseCBool((string)field.Attribute("Required")),
-                                 Direction = (int)field.Attribute("Direction"),
-                                 DontShow = (bool)field.Attribute("DontShow"),
-                                 DontTicket = (bool)field.Attribute("DontTicket"),
-                                 MaxLength = (int)field.Attribute("MaxLength"),
-                                 MinLength = (int)field.Attribute("MinLength"),
-                                 Title = (string)field.Attribute("Title"),
-                                 RegExp = (string)field.Attribute("RegularExpression"),
-                                 Comment = (string)field.Attribute("Comment"),
-                                 InterfaceType = ParseInerfaceType("InterfaceType"),
-                                 Type = ParseFieldType("Type"),
+                                 Name = (string)field.Attribute("Name") ?? "",
+                                 Required = ParseCBool((string)field.Attribute("Required") ?? ""),
+                                 Direction = (int?)field.Attribute("Direction") ?? -1,
+                                 DontShow = (bool?)field.Attribute("DontShow") ?? false,
+                                 DontTicket = (bool?)field.Attribute("DontTicket") ?? false,
+                                 MaxLength = (int?)field.Attribute("MaxLength") ?? -1,
+                                 MinLength = (int?)field.Attribute("MinLength") ?? -1,
+                                 Title = (string)field.Attribute("Title") ?? "",
+                                 RegExp = (string)field.Attribute("RegularExpression") ?? "",
+                                 Comment = (string)field.Attribute("Comment") ?? "",
+                                 InterfaceType = ParseInerfaceType((string)field.Attribute("InterfaceType")),
+                                 Type = ParseFieldType((string)field.Attribute("Type")),
                                  Mask = ParseMask((string)field.Attribute("Mask"), (string)field.Attribute("Type")),
                                  MaskListItem = ParseMaskListItem((string)field.Attribute("Mask"), (string)field.Attribute("Type"))
                              };
-            return null;
+            return collection;
         }
 
         private static bool ParseCBool(string value)
