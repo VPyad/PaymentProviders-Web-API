@@ -20,6 +20,8 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentsProviders
 
         public string CatalogCode { get; set; }
 
+        public PaymentCategory Category { get; set; }
+
         public IEnumerable<PaymentRegion> Regions { get; set; }
 
         /// <summary>

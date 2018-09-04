@@ -22,6 +22,16 @@ namespace PaymentProviders_Web_API.Services.Parsers
             Debug.WriteLine($"Providers with at least one Interface type Unknown: {providers.Count(x => x.Fields.Any(z => z.InterfaceType == Models.WebApi.PaymentsProviders.FieldInerfaceType.Unknown))}");
         }
 
+        public static void LogProvidersOrderedByCatalog(IEnumerable<PaymentProvider> providers)
+        {
+            List<PaymentProvider> list = new List<PaymentProvider>(providers);
+
+            foreach (var item in list.OrderBy(x => x.CatalogCode))
+            {
+                Debug.WriteLine($"Category: {item.Category.NameRu}, Provider: {item.NameRu}");
+            }
+        }
+
         public static void LogProviderAndFiledNameWithTypeFilter(IEnumerable<PaymentProvider> providers, FieldType fieldType)
         {
             foreach (var provider in providers)
@@ -36,6 +46,15 @@ namespace PaymentProviders_Web_API.Services.Parsers
                         Debug.WriteLine($"Field name: {item.Name}");
                     Debug.WriteLine("-------------");
                 }
+            }
+        }
+
+        public static void LogCategories(IEnumerable<PaymentCategory> paymentCategories)
+        {
+            foreach (var item in paymentCategories)
+            {
+                Debug.WriteLine($"Code: {item.CategoryCode}, Name: {item.NameRu}");
+                Debug.WriteLine("---------------");
             }
         }
     }

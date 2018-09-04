@@ -21,8 +21,13 @@ namespace PaymentProviders_Web_API.Services.Parsers
 
         public IEnumerable<PaymentProvider> ParseProviders()
         {
-            //var q = (string)xdoc.Descendants("Operator").First().Descendants("Param").First().Attribute("Name");
+            var categories = ParseCategories();
 
+            return ParseProviders(categories);
+        }
+
+        public IEnumerable<PaymentProvider> ParseProviders(IEnumerable<PaymentCategory> categories)
+        {
             var collection = from provider in xdoc.Descendants("Operator").Where(x => (string)x.Attribute("Group") == "false")
                              select new PaymentProvider
                              {
@@ -43,7 +48,20 @@ namespace PaymentProviders_Web_API.Services.Parsers
                                      (string)provider.Attribute("Summa"), (string)provider.Attribute("MaxSumma"))
                                  },
                                  Regions = ParseRegions((string)provider.Attribute("Region")),
-                                 Fields = ParseFields(provider.Descendants("Param"))
+                                 Fields = ParseFields(provider.Descendants("Param")),
+                                 Category = categories.Where(x => x.CategoryCode == (string)provider.Attribute("Senior")).FirstOrDefault()
+                             };
+
+            return collection;
+        }
+
+        public IEnumerable<PaymentCategory> ParseCategories()
+        {
+            var collection = from category in xdoc.Descendants("Operator").Where(x => (string)x.Attribute("Group") == "true")
+                             select new PaymentCategory
+                             {
+                                 CategoryCode = (string)category.Attribute("OperatorCode"),
+                                 NameRu = (string)category.Attribute("Name_RU")
                              };
 
             return collection;
