@@ -57,8 +57,5 @@ namespace PaymentProviders_Web_API.Services.Parsers
                 Debug.WriteLine("---------------");
             }
         }
-
-        private void Test()
-        { }
     }
 }
