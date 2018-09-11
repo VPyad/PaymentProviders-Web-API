@@ -11,7 +11,7 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentsProviders
 
         public ProductPaymentInfoType ProductType { get; set; }
 
-        public Commission Commission { get; set; }
+        public virtual Commission Commission { get; set; }
 
         public double MinSum { get; set; }
 
