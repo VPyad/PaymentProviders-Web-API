@@ -15,5 +15,7 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentsProviders
         public string CategoryCode { get; set; }
 
         public string NameRu { get; set; }
+
+        public virtual ICollection<PaymentProvider> Providers { get; set; }
     }
 }

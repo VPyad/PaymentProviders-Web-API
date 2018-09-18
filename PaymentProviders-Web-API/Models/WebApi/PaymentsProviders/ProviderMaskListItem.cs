@@ -12,5 +12,9 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentsProviders
         public string Key { get; set; }
 
         public string Desc { get; set; }
+
+        public long ProviderFieldId { get; set; }
+
+        public virtual ProviderField ProviderField { get; set; }
     }
 }

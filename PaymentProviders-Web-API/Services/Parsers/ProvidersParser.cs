@@ -55,7 +55,7 @@ namespace PaymentProviders_Web_API.Services.Parsers
             return collection;
         }
 
-        public IEnumerable<PaymentCategory> ParseCategories()
+        public ICollection<PaymentCategory> ParseCategories()
         {
             var collection = from category in xdoc.Descendants("Operator").Where(x => (string)x.Attribute("Group") == "true")
                              select new PaymentCategory
@@ -64,10 +64,10 @@ namespace PaymentProviders_Web_API.Services.Parsers
                                  NameRu = (string)category.Attribute("Name_RU")
                              };
 
-            return collection;
+            return collection.ToArray();
         }
 
-        private static IEnumerable<ProviderMaskListItem> ParseMaskListItem(string mask, string type)
+        private static ICollection<ProviderMaskListItem> ParseMaskListItem(string mask, string type)
         {
             if (type != "MaskList")
                 return null;
@@ -88,7 +88,7 @@ namespace PaymentProviders_Web_API.Services.Parsers
             return list;
         }
 
-        private static IEnumerable<ProductPaymentInfo> ParsePaymentInfo(string commision, string minSumma, string maxSumma)
+        private static ICollection<ProductPaymentInfo> ParsePaymentInfo(string commision, string minSumma, string maxSumma)
         {
             List<ProductPaymentInfo> productPaymInfoList = new List<ProductPaymentInfo>();
                         
@@ -167,7 +167,7 @@ namespace PaymentProviders_Web_API.Services.Parsers
             return productPaymInfoList;
         }
 
-        private static IEnumerable<PaymentRegion> ParseRegions(string regions)
+        private static ICollection<PaymentRegion> ParseRegions(string regions)
         {
             if (string.IsNullOrEmpty(regions))
             {
@@ -189,7 +189,7 @@ namespace PaymentProviders_Web_API.Services.Parsers
 
         }
 
-        private static IEnumerable<ProviderField> ParseFields(IEnumerable<XElement> fieldsXml)
+        private static ICollection<ProviderField> ParseFields(IEnumerable<XElement> fieldsXml)
         {
             if (fieldsXml == null)
                 return null;
@@ -212,7 +212,8 @@ namespace PaymentProviders_Web_API.Services.Parsers
                                  Mask = ParseMask((string)field.Attribute("Mask"), (string)field.Attribute("Type")),
                                  MaskListItem = ParseMaskListItem((string)field.Attribute("Mask"), (string)field.Attribute("Type"))
                              };
-            return collection;
+
+            return collection.ToArray();
         }
 
         private static bool ParseCBool(string value)

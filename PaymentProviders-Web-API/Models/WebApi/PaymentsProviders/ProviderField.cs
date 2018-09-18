@@ -15,6 +15,10 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentsProviders
 
         public virtual ICollection<ProviderMaskListItem> MaskListItem { get; set; }
 
+        public long? PaymentProviderId { get; set; }
+
+        public virtual PaymentProvider PaymentProvider { get; set; }
+
         public string Name { get; set; }
 
         public bool Required { get; set; }

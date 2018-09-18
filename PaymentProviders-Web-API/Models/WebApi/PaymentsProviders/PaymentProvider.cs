@@ -16,13 +16,15 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentsProviders
 
         public string NameRu { get; set; }
 
+        public long? PaymentInfoId { get; set; }
         public virtual PaymentInfo PaymentInfo { get; set; }
 
         public string CatalogCode { get; set; }
 
+        public long? CategoryId { get; set; }
         public virtual PaymentCategory Category { get; set; }
 
-        public virtual ICollection<PaymentRegion> Regions { get; set; }
+        public virtual ICollection<PaymentProviderRegion> Regions { get; set; }
 
         /// <summary>
         /// Determines whether provider is active of not. If provider was deleted no actions can be permofmed.

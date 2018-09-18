@@ -12,5 +12,7 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentsProviders
         public int Code { get; set; }
 
         public string Name { get; set; }
+
+        public virtual ICollection<PaymentProviderRegion> Providers { get; set; }
     }
 }
