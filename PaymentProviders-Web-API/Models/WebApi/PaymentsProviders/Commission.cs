@@ -17,7 +17,7 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentsProviders
 
         public double MaxSum { get; set; }
 
-        public long? ProductPaymentInfoId { get; set; }
+        public long ProductPaymentInfoRef { get; set; }
 
         public virtual ProductPaymentInfo ProductPaymentInfo { get; set; }
     }

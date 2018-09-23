@@ -14,10 +14,9 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentProviderConfigerations
         {
             builder.ToTable("ProviderField");
 
-            builder.HasOne(x => x.PaymentProvider)
+            /*builder.HasOne(x => x.PaymentProvider)
                 .WithMany(x => x.Fields)
-                .HasForeignKey(x => x.PaymentProviderId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade);*/
 
             builder.HasMany(x => x.MaskListItem)
                 .WithOne(x => x.ProviderField)

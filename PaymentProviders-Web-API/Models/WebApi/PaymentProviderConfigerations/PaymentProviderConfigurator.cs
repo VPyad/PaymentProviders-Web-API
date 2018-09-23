@@ -16,6 +16,7 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentProviderConfigerations
 
             builder.HasOne(x => x.PaymentInfo)
                 .WithOne(x => x.PaymentProvider)
+                .HasForeignKey<PaymentInfo>(x => x.PaymentProviderRef)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(x => x.Category)

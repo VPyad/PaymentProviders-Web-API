@@ -14,13 +14,13 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentProviderConfigerations
         {
             builder.ToTable("PaymentInfo");
 
-            builder.HasOne(x => x.PaymentProvider)
+            /*builder.HasOne(x => x.PaymentProvider)
                 .WithOne(x => x.PaymentInfo)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade);*/
 
             builder.HasMany(x => x.ProductsPaymentInfo)
                 .WithOne(x => x.PaymentInfo)
-                .HasForeignKey(x => x.PaymentInfoId)
+                //.HasForeignKey(x => x.PaymentInfoId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

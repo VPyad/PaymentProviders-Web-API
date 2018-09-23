@@ -11,7 +11,7 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentsProviders
 
         public virtual ICollection<ProductPaymentInfo> ProductsPaymentInfo { get; set; }
 
-        public long? PaymentProviderId { get; set; }
+        public long PaymentProviderRef { get; set; }
 
         public virtual PaymentProvider PaymentProvider { get; set; }
     }

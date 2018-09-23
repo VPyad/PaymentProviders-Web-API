@@ -39,7 +39,8 @@ namespace PaymentProviders_Web_API.DbContexts
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {          
+        {         
+            // TODO create migarion, update db, update remote db
             var productPaymentInfoTypeEnumConverter = new EnumToStringConverter<ProductPaymentInfoType>();
             var fieldTypeEnumConverter = new EnumToStringConverter<FieldType>();
             var fieldInerfaceTypeEnumConverter = new EnumToStringConverter<FieldInerfaceType>();
@@ -48,14 +49,14 @@ namespace PaymentProviders_Web_API.DbContexts
             modelBuilder.Entity<ProviderField>().Property(x => x.InterfaceType).HasConversion(fieldInerfaceTypeEnumConverter);
             modelBuilder.Entity<ProductPaymentInfo>().Property(x => x.ProductType).HasConversion(productPaymentInfoTypeEnumConverter);
 
-            modelBuilder.ApplyConfiguration(new PaymentCategoryConfigurator());
-            modelBuilder.ApplyConfiguration(new PaymentCommissionConfigurator());
+            //modelBuilder.ApplyConfiguration(new PaymentCategoryConfigurator());
+            //modelBuilder.ApplyConfiguration(new PaymentCommissionConfigurator());
             modelBuilder.ApplyConfiguration(new PaymentInfoConfigurator());
             modelBuilder.ApplyConfiguration(new PaymentProviderConfigurator());
             modelBuilder.ApplyConfiguration(new PaymentProviderFieldConfigurator());
             modelBuilder.ApplyConfiguration(new PaymentProviderRegionConfigurator());
             modelBuilder.ApplyConfiguration(new ProductPaymentInfoConfigurator());
-            modelBuilder.ApplyConfiguration(new ProviderMaskListItemConfigurator());
+            //modelBuilder.ApplyConfiguration(new ProviderMaskListItemConfigurator());
         }
     }
 }

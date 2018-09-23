@@ -21,6 +21,7 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentProviderConfigerations
 
             builder.HasOne(x => x.Commission)
                 .WithOne(x => x.ProductPaymentInfo)
+                .HasForeignKey<Commission>(x => x.ProductPaymentInfoRef)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
