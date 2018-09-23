@@ -45,6 +45,8 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentsProviders
 
         public string ChequeName { get; set; }
 
+        public string RegionString { get; set; }
+
         public virtual ICollection<ProviderField> Fields { get; set; }
     }
 }

@@ -47,9 +47,9 @@ namespace PaymentProviders_Web_API.Services.Parsers
                                      ProductsPaymentInfo = ParsePaymentInfo((string)provider.Attribute("ExtraCommission"),
                                      (string)provider.Attribute("Summa"), (string)provider.Attribute("MaxSumma"))
                                  },
-                                 //Regions = ParseRegions((string)provider.Attribute("Region")),
+                                 RegionString = (string)provider.Attribute("Region"),
                                  Fields = ParseFields(provider.Descendants("Param")),
-                                 Category = categories.Where(x => x.CategoryCode == (string)provider.Attribute("Senior")).FirstOrDefault()
+                                 //Category = categories.Where(x => x.CategoryCode == (string)provider.Attribute("Senior")).FirstOrDefault()
                              };
 
             return collection;
@@ -187,6 +187,16 @@ namespace PaymentProviders_Web_API.Services.Parsers
 
             return list;
 
+        }
+
+        public IEnumerable<PaymentRegion> LoadRegions()
+        {
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "res", "CodesAndRegions.json");
+            JObject json = JObject.Parse(System.IO.File.ReadAllText(filePath));
+
+            var regionsList = from region in json["data"] select new PaymentRegion { Name = (string)region["name"], Code = (int)region["regioncode"] };
+
+            return regionsList;
         }
 
         private static ICollection<ProviderField> ParseFields(IEnumerable<XElement> fieldsXml)
