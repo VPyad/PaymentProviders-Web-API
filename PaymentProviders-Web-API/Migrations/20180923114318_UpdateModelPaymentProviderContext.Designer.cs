@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PaymentProviders_Web_API.DbContexts;
 
 namespace PaymentProvidersWebAPI.Migrations
 {
     [DbContext(typeof(PaymentProvidersContext))]
-    partial class PaymentProvidersContextModelSnapshot : ModelSnapshot
+    [Migration("20180923114318_UpdateModelPaymentProviderContext")]
+    partial class UpdateModelPaymentProviderContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

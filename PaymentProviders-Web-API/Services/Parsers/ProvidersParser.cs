@@ -47,7 +47,7 @@ namespace PaymentProviders_Web_API.Services.Parsers
                                      ProductsPaymentInfo = ParsePaymentInfo((string)provider.Attribute("ExtraCommission"),
                                      (string)provider.Attribute("Summa"), (string)provider.Attribute("MaxSumma"))
                                  },
-                                 Regions = ParseRegions((string)provider.Attribute("Region")),
+                                 //Regions = ParseRegions((string)provider.Attribute("Region")),
                                  Fields = ParseFields(provider.Descendants("Param")),
                                  Category = categories.Where(x => x.CategoryCode == (string)provider.Attribute("Senior")).FirstOrDefault()
                              };
