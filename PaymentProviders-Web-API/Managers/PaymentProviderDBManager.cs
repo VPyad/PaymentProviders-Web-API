@@ -45,7 +45,7 @@ namespace PaymentProviders_Web_API.Managers
             foreach (var provider in providers)
             {
                 var category = paymentProvidersContext.Categories.Where(x => x.CategoryCode == provider.CatalogCode).FirstOrDefault();
-
+                
                 if (category != null)
                 {
                     provider.Category = category;
@@ -53,6 +53,31 @@ namespace PaymentProviders_Web_API.Managers
                 }
 
                 paymentProvidersContext.PaymentProviders.Add(provider);
+                paymentProvidersContext.SaveChanges();
+
+                // Region field may be null, in that case does not save ProviderPaymentRegion
+                if (string.IsNullOrEmpty(provider.RegionString))
+                    continue;
+
+                var regionsArray = provider.RegionString.Split(';');
+                var paymentRegions = paymentProvidersContext.PaymentRegions.Where(x => regionsArray.Contains(x.Code.ToString()));
+                var providerFromDb = paymentProvidersContext.PaymentProviders.Last();
+
+                foreach (var region in paymentRegions)
+                {
+                    var paymentProviderRegion = new PaymentProviderRegion
+                    {
+                        PaymentProvider = providerFromDb,
+                        PaymentRegion = region,
+                        PaymentRegionId = region.Id,
+                        PaymentProviderId = providerFromDb.Id
+                    };
+
+                    
+                    paymentProvidersContext.PaymentProviderRegions.Add(paymentProviderRegion);
+                    providerFromDb.Regions.Add(paymentProviderRegion);
+                }
+
                 paymentProvidersContext.SaveChanges();
             }
         }

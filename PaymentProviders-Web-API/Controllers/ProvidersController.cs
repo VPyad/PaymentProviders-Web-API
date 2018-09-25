@@ -21,12 +21,6 @@ namespace PaymentProviders_Web_API.Controllers
         [HttpPost("UploadFile")]
         public async Task<IActionResult> UploadFile(IFormFile file)
         {
-            PaymentProviderDBManager manager = new PaymentProviderDBManager();
-
-            manager.PrintProvidersInCategory();
-
-            return Ok();
-
             if (file == null || file.Length == 0)
                 return Content("file not selected");
 
@@ -47,6 +41,7 @@ namespace PaymentProviders_Web_API.Controllers
 
             PaymentProviderDBManager providerDBManager = new PaymentProviderDBManager();
 
+            providerDBManager.SaveRegions(regions);
             providerDBManager.SaveCategories(categories);
             providerDBManager.SaveProviders(providers);
 

@@ -27,6 +27,8 @@ namespace PaymentProviders_Web_API.DbContexts
 
         public DbSet<PaymentProvider> PaymentProviders { get; set; }
 
+        public DbSet<PaymentProviderRegion> PaymentProviderRegions { get; set; }
+
         public PaymentProvidersContext(DbContextOptions options) : base(options)
         { }
 
