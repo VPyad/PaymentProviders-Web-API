@@ -13,7 +13,9 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentsProviders
 
         public FieldInerfaceType InterfaceType { get; set; }
 
-        public IEnumerable<ProviderMaskListItem> MaskListItem { get; set; }
+        public virtual ICollection<ProviderMaskListItem> MaskListItem { get; set; }
+
+        public virtual PaymentProvider PaymentProvider { get; set; }
 
         public string Name { get; set; }
 
