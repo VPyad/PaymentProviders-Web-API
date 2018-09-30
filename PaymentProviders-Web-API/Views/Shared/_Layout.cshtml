@@ -30,10 +30,11 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                     <li><a asp-area="" asp-controller="Providers" asp-action="Index">Providers</a></li>
+                    <li><a asp-area="" asp-controller="PaymentProviders" asp-action="Index">PaymentProviders</a></li>
+                    <li><a asp-area="" asp-controller="PaymentCategories" asp-action="Index">PaymentCategories</a></li>
+                    <li><a asp-area="" asp-controller="PaymentRegions" asp-action="Index">PaymentRegions</a></li>
+                    <li><a asp-area="" asp-controller="ProviderFields" asp-action="Index">ProviderFields</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>

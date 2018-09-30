@@ -1,0 +1,114 @@
+﻿@model IEnumerable<PaymentProviders_Web_API.Models.WebApi.PaymentsProviders.PaymentProvider>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProviderCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NameRu)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PaymentInfoId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CatalogCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deleted)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mrlist)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MultiCheck)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NoSavePt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Check)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsSupportRequestRSTEP)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ChequeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RegionString)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProviderCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NameRu)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentInfoId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CatalogCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Deleted)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mrlist)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MultiCheck)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NoSavePt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Check)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsSupportRequestRSTEP)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChequeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RegionString)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

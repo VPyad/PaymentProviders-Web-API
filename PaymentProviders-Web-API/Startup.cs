@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PaymentProviders_Web_API.Data;
 using PaymentProviders_Web_API.Models;
 using PaymentProviders_Web_API.Services;
+using PaymentProviders_Web_API.DbContexts;
 
 namespace PaymentProviders_Web_API
 {
@@ -32,6 +33,8 @@ namespace PaymentProviders_Web_API
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddDbContext<PaymentProvidersContext>(options => options.UseSqlServer("Server=.;Database=PaymentProvidersDB;Trusted_Connection=True"));
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
