@@ -18,7 +18,7 @@ namespace PaymentProviders_Web_API.Controllers
             return View();
         }
 
-        [HttpPost("UploadFile")]
+        /*[HttpPost("UploadFile")]
         public async Task<IActionResult> UploadFile(IFormFile file)
         {
             if (file == null || file.Length == 0)
@@ -46,6 +46,6 @@ namespace PaymentProviders_Web_API.Controllers
             providerDBManager.SaveProviders(providers);
 
             return Ok(new { Name = file.FileName, Length = file.Length, Path = filePath });
-        }
+        }*/
     }
 }
