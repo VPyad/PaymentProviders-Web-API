@@ -2,20 +2,42 @@
     ViewData["Title"] = "Home Page";
 }
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    function showLoader() {
+        document.getElementById("importLoader").hidden = false;
+    }
+</script>
+
 <div>
     <h1>Manage providers</h1>
 
+    @if (ViewBag.isImportSuccessed != null && ViewBag.isImportSuccessed)
+    {
+        <div class="alert alert-success">
+            <strong>Success!</strong> Providers has been successfully imported
+        </div>
+    }
+
+    @if (ViewBag.isImportSuccessed != null && !ViewBag.isImportSuccessed)
+    {
+        <div class="alert alert-danger">
+            <stong>Error!</stong> An error occurred while providers import: @ViewBag.importMessage
+        </div>
+    }
+
     <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="UploadFile">
         <div class="form-group">
-            <div class="col">
-                <p>Upload provider catalog</p>
-                <input type="file" name="file" accept=".xml" />
-                <input type="submit" value="Upload and Update" />
+            <div class="row">
+                <div class="col-md-3">
+                    <p>Upload provider catalog</p>
+                    <input type="file" name="file" accept=".xml" class="btn btn-default" />
+                    <input type="submit" value="Upload and Update" onclick="showLoader()" class="btn btn-primary" style="margin-top: 10px" />
+                </div>
+                <div class="col-md-9" id="importLoader">
+                    <div class="loader" style="margin-left: 15px"></div>
+                </div>
             </div>
         </div>
     </form>
 </div>
-
-<div class="btn alert-danger">hjkj</div>
-
-<div class="loader"></div>

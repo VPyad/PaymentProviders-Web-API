@@ -15,8 +15,11 @@ namespace PaymentProviders_Web_API.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(bool? isSuccess, string importMessage)
         {
+            ViewBag.isImportSuccessed = isSuccess;
+            ViewBag.importMessage = importMessage;
+
             return View();
         }
 
@@ -24,7 +27,7 @@ namespace PaymentProviders_Web_API.Controllers
         public async Task<IActionResult> UploadFile(IFormFile file)
         {
             if (file == null || file.Length == 0)
-                return Content("file not selected");
+                return RedirectToAction("Index", "Home", new { isSuccess = false, importMessage = "file not selected" });
 
             var filePath = Path.Combine(
                         Directory.GetCurrentDirectory(), "wwwroot",
@@ -37,17 +40,25 @@ namespace PaymentProviders_Web_API.Controllers
 
             ProvidersParser parser = new ProvidersParser(filePath);
 
-            var regions = parser.LoadRegions();
-            var categories = parser.ParseCategories();
-            var providers = parser.ParseProviders();
+            try
+            {
+                var regions = parser.LoadRegions();
+                var categories = parser.ParseCategories();
+                var providers = parser.ParseProviders();
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Index", "Home", new { isSuccess = false, importMessage = "parsing input catalog error" });
+            }
 
             /*PaymentProviderDBManager providerDBManager = new PaymentProviderDBManager();
 
             providerDBManager.SaveRegions(regions);
             providerDBManager.SaveCategories(categories);
             providerDBManager.SaveProviders(providers);*/
-            
-            return Redirect("/Home");
+
+            //return Json("done");
+            return RedirectToAction("Index", "Home", new { isSuccess = true });
         }
 
         public IActionResult Error()
