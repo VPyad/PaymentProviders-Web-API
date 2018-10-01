@@ -36,9 +36,6 @@ namespace PaymentProviders_Web_API
 
             services.AddDbContext<PaymentProvidersContext>(options => options.UseSqlServer("Server=.;Database=PaymentProvidersDB;Trusted_Connection=True"));
 
-            // Add application services.
-            services.AddTransient<IEmailSender, EmailSender>();
-
             services.AddMvc();
         }
 
