@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using PaymentProviders_Web_API.Managers;
 using PaymentProviders_Web_API.Models;
+using PaymentProviders_Web_API.Models.WebApi.PaymentsProviders;
 using PaymentProviders_Web_API.Services.Parsers;
 
 namespace PaymentProviders_Web_API.Controllers
@@ -40,24 +41,41 @@ namespace PaymentProviders_Web_API.Controllers
 
             ProvidersParser parser = new ProvidersParser(filePath);
 
+            IEnumerable<PaymentRegion> regions;
+            IEnumerable<PaymentCategory> categories;
+            IEnumerable<PaymentProvider> providers;
+
             try
             {
-                var regions = parser.LoadRegions();
-                var categories = parser.ParseCategories();
-                var providers = parser.ParseProviders();
+                regions = parser.LoadRegions();
+                categories = parser.ParseCategories();
+                providers = parser.ParseProviders();
             }
             catch (Exception ex)
             {
                 return RedirectToAction("Index", "Home", new { isSuccess = false, importMessage = "parsing input catalog error" });
             }
 
-            /*PaymentProviderDBManager providerDBManager = new PaymentProviderDBManager();
+            if (regions == null || categories == null || providers == null)
+            {
+                return RedirectToAction("Index", "Home", new { isSuccess = false, importMessage = "necessary data wasn`t parsed" });
+            }
 
-            providerDBManager.SaveRegions(regions);
-            providerDBManager.SaveCategories(categories);
-            providerDBManager.SaveProviders(providers);*/
+            PaymentProviderDBManager providerDBManager = new PaymentProviderDBManager();
 
-            //return Json("done");
+            try
+            {                
+                providerDBManager.CleadDB();
+
+                providerDBManager.SaveRegions(regions);
+                providerDBManager.SaveCategories(categories);
+                providerDBManager.SaveProviders(providers);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Index", "Home", new { isSuccess = false, importMessage = "failed to save data to db" });
+            }
+
             return RedirectToAction("Index", "Home", new { isSuccess = true });
         }
 

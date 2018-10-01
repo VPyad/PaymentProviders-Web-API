@@ -18,6 +18,13 @@ namespace PaymentProviders_Web_API.Managers
             paymentProvidersContext = new PaymentProvidersContext();
         }
 
+        public void CleadDB()
+        {
+            paymentProvidersContext.Database.ExecuteSqlCommand("delete from Categories");
+            paymentProvidersContext.Database.ExecuteSqlCommand("delete from PaymentRegions");
+            paymentProvidersContext.Database.ExecuteSqlCommand("delete from PaymentProvider"); // delete records from this table will couse cascade delete from others tables
+        }
+
         public void SaveRegions(IEnumerable<PaymentRegion> regions)
         {
             foreach (var region in regions)
