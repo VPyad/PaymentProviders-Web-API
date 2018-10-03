@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -56,6 +58,7 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentsProviders
         public bool DontTicket { get; set; }
     }
 
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum FieldType
     {
         String,
@@ -65,6 +68,7 @@ namespace PaymentProviders_Web_API.Models.WebApi.PaymentsProviders
         Unknown
     }
 
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum FieldInerfaceType
     {
         Number,
