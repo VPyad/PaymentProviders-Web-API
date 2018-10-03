@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using PaymentProviders_Web_API.DbContexts;
+using PaymentProviders_Web_API.Helpers;
 using PaymentProviders_Web_API.Models.WebApi.PaymentsProviders;
 
 namespace PaymentProviders_Web_API.WebApiControllers
@@ -23,7 +25,7 @@ namespace PaymentProviders_Web_API.WebApiControllers
 
         // GET: v1/PaymentProviderApi/OW||COMMUNAL
         [HttpGet("{id}", Name = "Get")]
-        public ActionResult<IEnumerable<PaymentProvider>> Get(string id, int? regionId)
+        public ActionResult Get(string id, int? regionId)
         {
             if (string.IsNullOrEmpty(id))
                 return BadRequest();
@@ -50,7 +52,12 @@ namespace PaymentProviders_Web_API.WebApiControllers
             if (providers == null || providers.Count == 0)
                 return NotFound();
             else
-                return providers;
+                return new JsonResult(providers,
+                    new JsonSerializerSettings()
+                    {
+                        ContractResolver = new IgnoreEmptyEnumerablesResolver(),
+                        NullValueHandling = NullValueHandling.Ignore
+                    });
         }
     }
 }

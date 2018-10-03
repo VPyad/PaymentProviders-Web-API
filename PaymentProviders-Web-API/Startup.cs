@@ -36,7 +36,7 @@ namespace PaymentProviders_Web_API
 
             services.AddDbContext<PaymentProvidersContext>(options => options.UseSqlServer("Server=.;Database=PaymentProvidersDB;Trusted_Connection=True"));
 
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options => options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,7 +56,7 @@ namespace PaymentProviders_Web_API
             app.UseStaticFiles();
 
             app.UseAuthentication();
-
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
