@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using PaymentProviders_Web_API.DbContexts;
+using PaymentProviders_Web_API.Helpers;
 using PaymentProviders_Web_API.Models.WebApi.PaymentsProviders;
 
 namespace PaymentProviders_Web_API.WebApiControllers
@@ -27,17 +29,17 @@ namespace PaymentProviders_Web_API.WebApiControllers
             if (string.IsNullOrEmpty(q))
                 return BadRequest(new { Message = "Search term is null or empty" });
 
-            switch (filter.ToLower())
-            {
-                case "providers":
-                    return ReturnProviders(q, regionId);
-                case "categories":
-                    return ReturnCategories(q);
-                case null:
-                    return ReturnProvidersAndCategories(q, regionId);
-                default:
-                    return BadRequest(new { Message = "filter parameter has invalid value" });
-            }
+            if (filter == null)
+                return ReturnAll(q, regionId);
+            else switch (filter.ToLower())
+                {
+                    case "providers":
+                        return ReturnProviders(q, regionId);
+                    case "categories":
+                        return ReturnCategories(q);
+                    default:
+                        return BadRequest(new { Message = "filter parameter has invalid value" });
+                }
         }
 
         private List<PaymentCategory> LoadCategories(string q)
@@ -80,7 +82,10 @@ namespace PaymentProviders_Web_API.WebApiControllers
                 return StatusCode(500);
             }
 
-            return new JsonResult(new { Providers = providers });
+            if (providers == null || providers.Count == 0)
+                return NotFound();
+            else
+                return new JsonResult(new { Providers = providers });
         }
 
         private ActionResult ReturnCategories(string q)
@@ -96,10 +101,13 @@ namespace PaymentProviders_Web_API.WebApiControllers
                 return StatusCode(500);
             }
 
-            return new JsonResult(new { Categories = categories });
+            if (categories == null || categories.Count == 0)
+                return NotFound();
+            else
+                return new JsonResult(new { Categories = categories });
         }
 
-        private ActionResult ReturnProvidersAndCategories(string q, int? regionId)
+        private ActionResult ReturnAll(string q, int? regionId)
         {
             List<PaymentProvider> providers;
             List<PaymentCategory> categories;
@@ -114,7 +122,18 @@ namespace PaymentProviders_Web_API.WebApiControllers
                 return StatusCode(500);
             }
 
-            return new JsonResult(new { Providers = providers, Categories = categories });
+            var providersIsNull = providers == null || providers.Count == 0;
+            var categoriesIsNull = categories == null || categories.Count == 0;
+
+            if (providersIsNull && categoriesIsNull)
+                return NotFound();
+            else
+                return new JsonResult(new { Providers = providers, Categories = categories },
+                    new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        ContractResolver = new IgnoreEmptyEnumerablesResolver()
+                    });
         }
     }
 }
